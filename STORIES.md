@@ -18,6 +18,6 @@ Lägga till bok via formulär (`add-book-form.spec.js`)
 
 Vyn för mina böcker (`favorites.spec.js`)
 
-1. Som användare vill jag kunna se alla böcker jag sparat i min lista
+1. Som användare vill jag kunna se alla böcker jag sparat i min lista `klar`
 2. Som användare vill jag kunna se alla sparade böcker även efter att jag har bytt vy, så att min data inte försvinner när jag navigerar. `klar`
 3. Som användare vill jag kunna ta bort en bok från min läslista, så att jag kan hålla listan uppdaterad.

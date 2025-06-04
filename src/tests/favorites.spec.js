@@ -58,4 +58,25 @@ test.describe("Läslistan favoriter", () => {
 		}
 	});
 
+	test("ta bort en bok från läslistan och kontrollera att den inte finns där", async ({ page }) => {
+		//börja med att spara flera böcker
+		const books = [
+			"Min katt är min chef",
+			"100 sätt att undvika måndagar",
+			"Att prata med växter – och vad de egentligen tycker om dig"
+		];
+		for (const bookTitle of books) {
+			await page.click(`[data-testid="star-${bookTitle}"]`);
+		}
+		//ta bort en bok från läslistan
+		const bookToRemove = "Min katt är min chef";
+		await page.click(`[data-testid="star-${bookToRemove}"]`);
+
+		//klicka sig till läslistan
+		await page.click('[data-testid="favorites"]');
+		//Förvänta sig att boken inte finns i läslistan
+		await expect(page.locator('.book', { hasText: bookToRemove })).toHaveCount(0);
+
+	});
+
 });
