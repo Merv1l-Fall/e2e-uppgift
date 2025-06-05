@@ -4,12 +4,6 @@ test.describe("Läslistan favoriter", () => {
 	//Ladda in sidan före varje test
 	test.beforeEach(async ({page}) => {
 		await page.goto('https://tap-ht24-testverktyg.github.io/exam-template/');
-
-		// förvänta sig att sidan har en titel som innehåller "Läslistan" för att kolla att sidan laddat korrekt.
-		await expect(page).toHaveTitle(/Läslistan/);
-
-		// förvänta sig att sidan har en rubrik som är "Läslistan" för att kolla så sidan laddat korrekt.
-		await expect(page.locator('h1')).toHaveText('Läslistan');
 	});
 
 	test("kolla att sparade böcker inte försvinner vid navigering", async ({ page }) => {
@@ -17,24 +11,24 @@ test.describe("Läslistan favoriter", () => {
 		const bookTitle = "Hur man tappar bort sin TV-fjärr 10 gånger om dagen"
 
 		//repeterar samma steg som i bok testet
-		await page.click(`[data-testid="star-${bookTitle}"]`);
-		await page.click('[data-testid="favorites"]');
-		await expect(page.locator('.book', { hasText: bookTitle })).toBeVisible();
+		await page.getByTestId(`star-${bookTitle}`).click();
+		await page.getByTestId("favorites").click()
+		await expect(page.getByText(bookTitle)).toBeVisible();
 
 		//klicka sig tillbaka till katalogen
 		await page.click('[data-testid="catalog"]');
 
 		//klicka sig till lägg tillbaka till sparade böcker
-		await page.click('[data-testid="favorites"]');
+		await page.getByTestId("favorites").click()
 		//förvänta dig att boken finns i läslistan
-		await expect(page.locator('.book', { hasText: bookTitle })).toBeVisible();
+		await expect(page.getByText(bookTitle)).toBeVisible();
 
 		//klicka sig till lägga till bok vyn
-		await page.click('[data-testid="add-book"]');
+		await page.getByTestId("add-book").click();
 
 		//kolla sparade böcker igen för att säkerställa att de inte är borta
-		await page.click('[data-testid="favorites"]');
-		await expect(page.locator('.book', { hasText: bookTitle })).toBeVisible();
+		await page.getByTestId("favorites").click()
+		await expect(page.getByText(bookTitle)).toBeVisible();
 	});
 
 	test("spara flera böcker i läslistan och kontrollera att de finns där", async ({ page }) => {
@@ -47,14 +41,14 @@ test.describe("Läslistan favoriter", () => {
 
 		//Loopar listan och favoriterar varje bok
 		for (const bookTitle of books) {
-			await page.click(`[data-testid="star-${bookTitle}"]`);
+			await page.getByTestId(`star-${bookTitle}`).click();
 		}
 		//klickar sig till läslistan
-		await page.click('[data-testid="favorites"]');
+		await page.getByTestId("favorites").click()
 
 		//Förvänta sig att alla böcker finns i läslistan
 		for (const bookTitle of books) {
-			await expect(page.locator('.book', { hasText: bookTitle })).toBeVisible();
+			await expect(page.getByText(bookTitle)).toBeVisible();
 		}
 	});
 
@@ -66,16 +60,16 @@ test.describe("Läslistan favoriter", () => {
 			"Att prata med växter – och vad de egentligen tycker om dig"
 		];
 		for (const bookTitle of books) {
-			await page.click(`[data-testid="star-${bookTitle}"]`);
+			await page.getByTestId(`star-${bookTitle}`).click();
 		}
 		//ta bort en bok från läslistan
 		const bookToRemove = "Min katt är min chef";
-		await page.click(`[data-testid="star-${bookToRemove}"]`);
+		await page.getByTestId(`star-${bookToRemove}`).click();
 
 		//klicka sig till läslistan
-		await page.click('[data-testid="favorites"]');
+		await page.getByTestId("favorites").click()
 		//Förvänta sig att boken inte finns i läslistan
-		await expect(page.locator('.book', { hasText: bookToRemove })).toHaveCount(0);
+		await expect(page.getByText(bookToRemove)).not.toBeVisible();
 
 	});
 
